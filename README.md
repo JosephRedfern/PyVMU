@@ -3,9 +3,9 @@ Variense VMU931 Toolkit
 
 This project aims at implementing a pure-python VMU931 toolkit, including both parsing and communication with the Variense VMU931 Device.
 
-The VMU931 is a USB-based accelrometer, gyroscope and magnetometer.
+The [VMU931](http://variense.com/product/vmu931/) is a high resolution, USB-based accelerometer, gyroscope and magnetometer made by [Variense](http://variense.com/). Please note that this library is unofficial, and is not produced/endorsed by Variense.
 
-So far, basic processing of all outputs: Quaternion, Euler Angles, Accelerometer, Magnetometer, Gyroscope and Heading.
+So far, basic processing of all outputs is supported: Quaternion, Euler Angles, Accelerometer, Magnetometer, Gyroscope and Heading. There is basic support for toggling these outputs, but we don't currently process status messages (or support calibration/self-test). This should come in the future, and all pull requests are welcome.
 
 Basic usage is as follows:
 
