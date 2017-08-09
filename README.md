@@ -5,19 +5,17 @@ This project aims at implementing a pure-python VMU931 toolkit, including both p
 
 The [VMU931](http://variense.com/product/vmu931/) is a high resolution, USB-based accelerometer, gyroscope and magnetometer made by [Variense](http://variense.com/). Please note that this library is unofficial, and is not produced/endorsed by Variense.
 
-So far, basic processing of all outputs is supported: Quaternion, Euler Angles, Accelerometer, Magnetometer, Gyroscope and Heading. There is basic support for toggling these outputs, but we don't currently process status messages (or support calibration/self-test). This should come in the future, and all pull requests are welcome.
+So far, basic processing of all outputs is supported: Quaternion, Euler Angles, Accelerometer, Magnetometer, Gyroscope and Heading. These outputs can be controlled using the `set_*` methods, or by pasing in flags to the VMU931Parser constructor. Status messages are parsed, allowing setting rather than toggling of different data streams. The toolkit does not currently support self-test or callibration functionality.
 
 Basic usage is as follows:
 
 ```
-with VMU931Parser(device="/dev/tty.usbmodem1411") as vp:
-    vp.toggle_euler() # Toggleoutput of Euler angles (OFF by default)
-    vp.toggler_quaternion() # Toggle output of quaternion data (ON by default)
-    vp.toggle_accelerometer()  # Toggle output of accelerometer data (OFF by default)
-
+with VMU931Parser(device="/dev/tty.usbmodem1411", euler=True, accelerometer=True) as vp:
     for n in range(100): # Print 100 datapoints
         packet = vp.parse()
         print(packet)
 ```
 
 vp.parse() also supports a `callback` argument, which is a function to be run on each incoming packet.
+
+For more examples, please see the [samples/](samples/) directory.
