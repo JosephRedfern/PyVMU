@@ -18,4 +18,4 @@ with VMU931Parser(device="/dev/tty.usbmodem1411", euler=True, accelerometer=True
 
 vp.parse() also supports a `callback` argument, which is a function to be run on each incoming packet.
 
-For more examples, please see the [samples/](samples/) directory.
+For more examples, please see the [examples/](examples/) directory.
