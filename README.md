@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/pyvmu/badge/?version=latest)](http://pyvmu.readthedocs.io/en/latest/?badge=latest)
+
 Variense VMU931 Toolkit
 =======================
 
