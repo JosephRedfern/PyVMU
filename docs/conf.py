@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# VarienseVMU documentation build configuration file, created by
+# PyVMU documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug 10 14:40:02 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -51,7 +51,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'VarienseVMU'
+project = u'PyVMU'
 copyright = u'2017, Joseph Redfern'
 author = u'Joseph Redfern'
 
@@ -105,7 +105,7 @@ html_theme = 'alabaster'
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'VarienseVMUdoc'
+htmlhelp_basename = 'PyVMUdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -132,7 +132,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'VarienseVMU.tex', u'VarienseVMU Documentation',
+    (master_doc, 'PyVMU.tex', u'PyVMU Documentation',
      u'Joseph Redfern', 'manual'),
 ]
 
@@ -142,7 +142,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'variensevmu', u'VarienseVMU Documentation',
+    (master_doc, 'pyvmu', u'PyVMU Documentation',
      [author], 1)
 ]
 
@@ -153,8 +153,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'VarienseVMU', u'VarienseVMU Documentation',
-     author, 'VarienseVMU', 'One line description of project.',
+    (master_doc, 'PyVMU', u'PyVMU Documentation',
+     author, 'PyVMU', 'One line description of project.',
      'Miscellaneous'),
 ]
 

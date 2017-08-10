@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
-from variensevmu.vmu931 import VMU931Parser
-from variensevmu import messages
+from pyvmu.vmu931 import VMU931Parser
+from pyvmu import messages
 
 
 # We want to be able to update the plot in real-time, plt.ion() is non-blocking.
@@ -13,7 +13,7 @@ acc_axes = figure.add_subplot(111)
 acc_axes.set_title("Accelerometer")
 acc_axes.set_xlabel("Timestamp (ms)")
 acc_axes.set_ylabel("Force (g)")
-acc_axes.set_ylim([-8, 8])  # -8 <= g <= 8
+acc_axes.set_ylim([-16, 16])  # -8 <= g <= 8
 
 x_line, = acc_axes.plot([], [], label="X")
 y_line, = acc_axes.plot([], [], label="Y")
@@ -28,7 +28,7 @@ z_points = []
 
 with VMU931Parser(accelerometer=True) as vp:
 
-    vp.set_accelerometer_resolution(8)  # Set resolution of accelerometer to 8g.
+    vp.set_accelerometer_resolution(16)  # Set resolution of accelerometer to 8g.
 
     while True:
         pkt = vp.parse()

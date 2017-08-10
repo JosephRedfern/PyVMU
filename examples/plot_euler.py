@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
-from variensevmu.vmu931 import VMU931Parser
-from variensevmu import messages
+from pyvmu.vmu931 import VMU931Parser
+from pyvmu import messages
 
 
 # We want to be able to update the plot in real-time, plt.ion() is non-blocking.

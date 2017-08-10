@@ -2,7 +2,7 @@ import serial
 import time
 import struct
 import logging
-import variensevmu.messages as messages
+import pyvmu.messages as messages
 
 
 class VMU931Parser(object):
@@ -269,6 +269,8 @@ class VMU931Parser(object):
                     logging.info("Parsing status message")
                     data = VMU931Parser._parse_status(message_text)
                     self.device_status = data
+                elif message_type == 'r':
+                    data = VMU931Parser._parse_unknown(message_text)
                 else:
                     logging.warning("No parser for {}".format(message_type))
 
@@ -403,3 +405,8 @@ class VMU931Parser(object):
         """
         ts, h = struct.unpack(">If", data[:8])
         return messages.Heading(timestamp=ts, h=h)
+
+    @staticmethod
+    def _parse_unknown(data):
+        print(len(data))
+        print(struct.unpack(">IIIIBB", data))

@@ -1,5 +1,5 @@
-VarienseVMU Documentation
-=========================
+PyVMU Documentation
+===================
 
 .. toctree::
    :maxdepth: 2
@@ -7,16 +7,14 @@ VarienseVMU Documentation
 
 Introduction
 ------------
-VarienseVMU is a Python-based toolkit for interfacing with the VMU931 IMU device. 
+PyVMU is a Python-based toolkit for interfacing with the Varience VMU931 IMU device.
 
 It supports communication with, and parsing of the VMU931 data streams. 
 
 Usage
 -----
-.. automodule:: variensevmu.vmu931
+.. automodule:: pyvmu.vmu931
 .. autoclass:: VMU931Parser
     :members:
 
     .. automethod:: __init__
-
-.. automodule:: variensevmu.messages
