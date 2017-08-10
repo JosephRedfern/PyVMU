@@ -6,6 +6,9 @@ import variensevmu.messages as messages
 
 
 class VMU931Parser(object):
+    """
+    This class is responsible for communicating with and parsing data from the VMU931 inertial measurement unit. 
+    """
     def __init__(self,
                  device="/dev/tty.usbmodem1411",
                  accelerometer=False,
@@ -17,7 +20,8 @@ class VMU931Parser(object):
                  ):
         """
         Opens a connection to the VMU931 device
-        :param device: Serial device name (on Windows) or path (*nix, including OS X).
+        
+        :param device: Serial device name (on Windows) or path (nix, including OS X).
         :param accelerometer: Enable/disable accelerometer data streaming.
         :param magnetometer: Enable/disable magnetometer data streaming.
         :param gyroscope: Enable/disable gyroscope data streaming.
@@ -45,141 +49,135 @@ class VMU931Parser(object):
     def set_quaternion(self, state):
         """
         Enable/disable streaming of quaternion data.
-        :param state: desired state
-        :return: 
+        
+        :param state: True/False, desired state
         """
         assert self.device_status is not None, "Device status is not set"
 
         if self.device_status.quaternions_streaming != state:
-            self.toggle_quaternion()
+            self._toggle_quaternion()
 
     def set_euler(self, state):
         """
         Enable/disable streaming of euler angle data.
-        :param state: desired state
-        :return: 
+        
+        :param state: True/False, desired state
         """
         assert self.device_status is not None, "Device status is not set"
 
         if self.device_status.euler_streaming != state:
-            self.toggle_euler()
+            self._toggle_euler()
 
     def set_accelerometer(self, state):
         """
         Enable/disable streaming of accelerometer data.
-        :param state: desired state
-        :return: 
+        
+        :param state: True/False, desired state
         """
         assert self.device_status is not None, "Device status is not set"
 
         if self.device_status.accelerometer_streaming != state:
-            self.toggle_accelerometer()
+            self._toggle_accelerometer()
 
     def set_magnetometer(self, state):
         """
         Enable/disable streaming of magnetometer data.
-        :param state: desired state
-        :return: 
+        
+        :param state: True/False, desired state
         """
         assert self.device_status is not None, "Device status is not set"
 
         if self.device_status.magnetometer_streaming != state:
-            self.toggle_magnetometer()
+            self._toggle_magnetometer()
 
     def set_gyroscope(self, state):
         """
         Enabled/disable streaming of gyroscope data.
-        :param state: desired state
-        :return: 
+        
+        :param state: True/False, desired state
         """
         assert self.device_status is not None, "Device status is not set"
 
         if self.device_status.gyroscope_streaming != state:
-            self.toggle_gyroscope()
+            self._toggle_gyroscope()
 
     def set_heading(self, state):
         """
         Enable/disable streaming of compass heading data.
-        :param state: desired state
-        :return: 
+        
+        :param state: True/False, desired state
         """
         assert self.device_status is not None, "Device status is not set"
 
         if self.device_status.heading_streaming != state:
-            self.toggle_heading()
+            self._toggle_heading()
 
-    def toggle_quaternion(self):
+    def _toggle_quaternion(self):
         """
         Toggles quaternion output from the VMU931 device.
-        :return: 
         """
-        self.send_message("varq")
+        self._send_message("varq")
 
-    def toggle_euler(self):
+    def _toggle_euler(self):
         """
         Toggles quaternion output from the VMU931 device.
-        :return: 
         """
-        self.send_message("vare")
+        self._send_message("vare")
 
-    def toggle_heading(self):
+    def _toggle_heading(self):
         """
         Toggles heading output from the VMU931 device.
-        :return: 
         """
-        self.send_message("varh")
+        self._send_message("varh")
 
-    def toggle_accelerometer(self):
+    def _toggle_accelerometer(self):
         """
         Toggles accelerometer output from the VMU931 device.
-        :return: 
         """
-        self.send_message("vara")
+        self._send_message("vara")
 
-    def toggle_gyroscope(self):
+    def _toggle_gyroscope(self):
         """
         Toggles gyroscope output from the VMU931 device.
-        :return: 
         """
-        self.send_message("varg")
+        self._send_message("varg")
 
-    def toggle_magnetometer(self):
+    def _toggle_magnetometer(self):
         """
         Toggles magnetometer output from the VMU931 device.
-        :return: 
         """
-        self.send_message("varc")
+        self._send_message("varc")
 
     def set_gyroscope_resolution(self, resolution):
         """
         Sets the gyroscope output resolution of the VMU931 device.
+        
         :param resolution: 250, 500, 1000 or 2000.
-        :return: 
         """
         assert resolution in (250, 500, 1000, 2000), "Invalid gyroscope resolution, must be 250, 500, 1000 or 2000"
 
         mapping = {250: 0, 500: 1, 1000: 2, 2000: 3}
         command = "var{}".format(mapping[resolution])
-        self.send_message(command)
+        self._send_message(command)
 
     def set_accelerometer_resolution(self, resolution):
         """
         Sets the accelerometer output resolution of the VMU931 device.
+        
         :param resolution: 2, 4, 8 or 16. 
-        :return: 
         """
         assert resolution in (2, 4, 8, 16), "Invalid accelerometer resolution, must be 2, 4, 8 or 18"
 
         mapping = {2: 4, 4: 5, 8: 6, 16: 7}
         command = "var{}".format(mapping[resolution])
-        self.send_message(command)
+        self._send_message(command)
 
-    def send_message(self, message, update_status=True):
+    def _send_message(self, message, update_status=True):
         """
         Sends a message to the VMU931 device, with 5ms delay between each character. 
+        
         :param message: Message to send to device
         :param update_status: Update sensor status after message send (defaults to True)
-        :return: 
         """
         byte_message = message.encode('ascii')
 
@@ -193,16 +191,15 @@ class VMU931Parser(object):
 
         if update_status:
             self.request_status()
-            time.sleep(0.200)
+            time.sleep(0.100)
 
     def request_status(self):
         """
         Request a new status packet from the VMU931
-        :return: 
         """
         # We don't want to update the status again after sending the message, otherwise we'd be in an infinite loop.
         logging.info("Requesting status update")
-        self.send_message("vars", update_status=False)
+        self._send_message("vars", update_status=False)
 
     def parse(self, callback=None):
         """
@@ -210,7 +207,13 @@ class VMU931Parser(object):
         within a loop.
 
         If device status is currently known, we wait for an incoming status packet and parse it. This method will block
-        until status is received (so that we're in a known state)
+        until status is received (so that we're in a known state). This should never happen outside of the automatic
+        call to parse() made during initialisation.
+        
+        When a status packet is received, self.device_status is updated to represent the new state. 
+        
+        If a callback method is specified (through the `callback` argument) when calling parse(), that method will be
+        called when the packet is parsed.
 
         :param callback: Method to call after processing each packet
         :return: processed packet
@@ -246,25 +249,25 @@ class VMU931Parser(object):
 
                 if message_type == 'e':
                     logging.info("Parsing Euler")
-                    data = VMU931Parser.parse_euler(message_text)
+                    data = VMU931Parser._parse_euler(message_text)
                 elif message_type == 'q':
                     logging.info("Parsing Quaternion")
-                    data = VMU931Parser.parse_quaternion(message_text)
+                    data = VMU931Parser._parse_quaternion(message_text)
                 elif message_type == 'h':
                     logging.info("Parsing Heading")
-                    data = VMU931Parser.parse_heading(message_text)
+                    data = VMU931Parser._parse_heading(message_text)
                 elif message_type == 'a':
                     logging.info("Parsing Accelerometer")
-                    data = VMU931Parser.parse_accelerometer(message_text)
+                    data = VMU931Parser._parse_accelerometer(message_text)
                 elif message_type == 'g':
                     logging.info("Parsing Gyroscope")
-                    data = VMU931Parser.parse_gyroscope(message_text)
+                    data = VMU931Parser._parse_gyroscope(message_text)
                 elif message_type == 'c':
                     logging.info("Parsing Magnetometer")
-                    data = VMU931Parser.parse_magnetometer(message_text)
+                    data = VMU931Parser._parse_magnetometer(message_text)
                 elif message_type == 's':
                     logging.info("Parsing status message")
-                    data = VMU931Parser.parse_status(message_text)
+                    data = VMU931Parser._parse_status(message_text)
                     self.device_status = data
                 else:
                     logging.warning("No parser for {}".format(message_type))
@@ -275,10 +278,11 @@ class VMU931Parser(object):
                     return data
 
     @staticmethod
-    def parse_status(data):
+    def _parse_status(data):
         """
         Parse the contents of a status message according to the VMU931 User Guide
         (http://variense.com/Docs/VMU931/VMU931_UserGuide.pdf)
+        
         :param data: Bytes to process
         :return: Device Status
         """
@@ -335,9 +339,10 @@ class VMU931Parser(object):
         )
 
     @staticmethod
-    def parse_quaternion(data):
+    def _parse_quaternion(data):
         """
         Parse a quaternion data packet
+        
         :param data: Bytes to parse
         :return: Parsed quaternion packet
         """
@@ -345,9 +350,10 @@ class VMU931Parser(object):
         return messages.Quaternion(timestamp=ts, w=w, x=x, y=y, z=z)
 
     @staticmethod
-    def parse_euler(data):
+    def _parse_euler(data):
         """
         Parse a euler angle data packet
+        
         :param data: Bytes to parse
         :return: Parsed euler angle packet
         """
@@ -355,9 +361,10 @@ class VMU931Parser(object):
         return messages.Euler(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
-    def parse_accelerometer(data):
+    def _parse_accelerometer(data):
         """
         Parse a euler angle data packet
+        
         :param data: Bytes to parse
         :return: Parsed euler angle packet
         """
@@ -365,9 +372,10 @@ class VMU931Parser(object):
         return messages.Accelerometer(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
-    def parse_magnetometer(data):
+    def _parse_magnetometer(data):
         """
         Parse a magnetometer data packet
+        
         :param data: Bytes to parse
         :return: Parsed magnetometer packet
         """
@@ -375,9 +383,10 @@ class VMU931Parser(object):
         return messages.Magnetometer(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
-    def parse_gyroscope(data):
+    def _parse_gyroscope(data):
         """
         Parse a gyroscope data packet
+        
         :param data: Bytes to parse
         :return: Parsed gyroscope packet
         """
@@ -385,9 +394,10 @@ class VMU931Parser(object):
         return messages.Gyroscope(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
-    def parse_heading(data):
+    def _parse_heading(data):
         """
         Parse a compass heading data packet
+        
         :param data: Bytes to parse
         :return: Parsed compass heading packet
         """
