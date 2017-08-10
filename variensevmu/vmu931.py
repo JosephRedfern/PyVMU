@@ -16,8 +16,14 @@ class VMU931Parser(object):
                  heading=False
                  ):
         """
-        Opens connection to VMU931 device
-        :param device: 
+        Opens a connection to the VMU931 device
+        :param device: Serial device name (on Windows) or path (*nix, including OS X).
+        :param accelerometer: Enable/disable accelerometer data streaming.
+        :param magnetometer: Enable/disable magnetometer data streaming.
+        :param gyroscope: Enable/disable gyroscope data streaming.
+        :param euler: Enable/disable euler angle data streaming.
+        :param quaternion: Enable/disable quaternion data streaming.
+        :param heading: Enable/disable compass heading data streaming. 
         """
         self.ser = serial.Serial(device)
         self.device_status = None
@@ -38,8 +44,8 @@ class VMU931Parser(object):
 
     def set_quaternion(self, state):
         """
-        Enable streaming of quaternion data.
-        :param state: 
+        Enable/disable streaming of quaternion data.
+        :param state: desired state
         :return: 
         """
         assert self.device_status is not None, "Device status is not set"
@@ -50,7 +56,7 @@ class VMU931Parser(object):
     def set_euler(self, state):
         """
         Enable/disable streaming of euler angle data.
-        :param state: 
+        :param state: desired state
         :return: 
         """
         assert self.device_status is not None, "Device status is not set"
@@ -61,7 +67,7 @@ class VMU931Parser(object):
     def set_accelerometer(self, state):
         """
         Enable/disable streaming of accelerometer data.
-        :param state: 
+        :param state: desired state
         :return: 
         """
         assert self.device_status is not None, "Device status is not set"
@@ -72,7 +78,7 @@ class VMU931Parser(object):
     def set_magnetometer(self, state):
         """
         Enable/disable streaming of magnetometer data.
-        :param state: 
+        :param state: desired state
         :return: 
         """
         assert self.device_status is not None, "Device status is not set"
@@ -83,7 +89,7 @@ class VMU931Parser(object):
     def set_gyroscope(self, state):
         """
         Enabled/disable streaming of gyroscope data.
-        :param state: 
+        :param state: desired state
         :return: 
         """
         assert self.device_status is not None, "Device status is not set"
@@ -94,7 +100,7 @@ class VMU931Parser(object):
     def set_heading(self, state):
         """
         Enable/disable streaming of compass heading data.
-        :param state: 
+        :param state: desired state
         :return: 
         """
         assert self.device_status is not None, "Device status is not set"
@@ -102,10 +108,9 @@ class VMU931Parser(object):
         if self.device_status.heading_streaming != state:
             self.toggle_heading()
 
-
     def toggle_quaternion(self):
         """
-        Toggles quaternion output from the VMU931 device
+        Toggles quaternion output from the VMU931 device.
         :return: 
         """
         self.send_message("varq")
@@ -176,10 +181,10 @@ class VMU931Parser(object):
         :param update_status: Update sensor status after message send (defaults to True)
         :return: 
         """
-        bmessage = message.encode('ascii')
+        byte_message = message.encode('ascii')
 
         # bytes must be sent with 1ms+ interval to be recognised by device.
-        for c in bmessage:
+        for c in byte_message:
             bs = bytes([c])
             self.ser.write(bs)
             logging.debug("Sent {}".format(bs))
@@ -195,7 +200,6 @@ class VMU931Parser(object):
         Request a new status packet from the VMU931
         :return: 
         """
-
         # We don't want to update the status again after sending the message, otherwise we'd be in an infinite loop.
         logging.info("Requesting status update")
         self.send_message("vars", update_status=False)
@@ -206,12 +210,11 @@ class VMU931Parser(object):
         within a loop.
 
         If device status is currently known, we wait for an incoming status packet and parse it. This method will block
-        until status is recieved (so that we're in a known state)
+        until status is received (so that we're in a known state)
 
         :param callback: Method to call after processing each packet
         :return: processed packet
         """
-
         # If we don't know the current device status, request it
         if self.device_status is None:
             self.request_status()
@@ -333,30 +336,60 @@ class VMU931Parser(object):
 
     @staticmethod
     def parse_quaternion(data):
+        """
+        Parse a quaternion data packet
+        :param data: Bytes to parse
+        :return: Parsed quaternion packet
+        """
         ts, w, x, y, z = struct.unpack(">Iffff", data[:20])
         return messages.Quaternion(timestamp=ts, w=w, x=x, y=y, z=z)
 
     @staticmethod
     def parse_euler(data):
+        """
+        Parse a euler angle data packet
+        :param data: Bytes to parse
+        :return: Parsed euler angle packet
+        """
         ts, x, y, z = struct.unpack(">Ifff", data[:16])
         return messages.Euler(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
     def parse_accelerometer(data):
+        """
+        Parse a euler angle data packet
+        :param data: Bytes to parse
+        :return: Parsed euler angle packet
+        """
         ts, x, y, z = struct.unpack(">Ifff", data[:16])
         return messages.Accelerometer(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
     def parse_magnetometer(data):
+        """
+        Parse a magnetometer data packet
+        :param data: Bytes to parse
+        :return: Parsed magnetometer packet
+        """
         ts, x, y, z = struct.unpack(">Ifff", data[:16])
         return messages.Magnetometer(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
     def parse_gyroscope(data):
+        """
+        Parse a gyroscope data packet
+        :param data: Bytes to parse
+        :return: Parsed gyroscope packet
+        """
         ts, x, y, z = struct.unpack(">Ifff", data[:16])
         return messages.Gyroscope(timestamp=ts, x=x, y=y, z=z)
 
     @staticmethod
     def parse_heading(data):
+        """
+        Parse a compass heading data packet
+        :param data: Bytes to parse
+        :return: Parsed compass heading packet
+        """
         ts, h = struct.unpack(">If", data[:8])
         return messages.Heading(timestamp=ts, h=h)
