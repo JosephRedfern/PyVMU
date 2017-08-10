@@ -3,3 +3,6 @@
 *.pyc
 *.ropeproject
 *.idea
+*.DS_Store
+
+docs/build
