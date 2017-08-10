@@ -7,7 +7,7 @@ PyVMU Documentation
 
 Introduction
 ------------
-PyVMU is a Python-based toolkit for interfacing with the Varience VMU931 IMU device.
+PyVMU is a Python-based toolkit for interfacing with the Variense VMU931 IMU device.
 
 It supports communication with, and parsing of the VMU931 data streams. 
 
