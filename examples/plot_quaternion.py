@@ -37,7 +37,7 @@ with VMU931Parser(quaternion=True) as vp:
             print(pkt)
 
         if isinstance(pkt, messages.Quaternion):
-            ts, x, y, z, w = pkt
+            ts, w, x, y, z = pkt
             ts_points.append(ts)
             w_points.append(w)
             x_points.append(x)
