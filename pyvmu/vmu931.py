@@ -200,6 +200,14 @@ class VMU931Parser(object):
         # We don't want to update the status again after sending the message, otherwise we'd be in an infinite loop.
         logging.info("Requesting status update")
         self._send_message("vars", update_status=False)
+        
+    def calibrate(self):
+        """
+        Calibrate the VMU931 (be sure to lay the device on a flat surface, with Z axis pointing upward)
+        """
+        # We don't want to update the status again after sending the message, otherwise we'd be in an infinite loop.
+        logging.info("Requesting calibration...")
+        self._send_message("varl", update_status=False)
 
     def parse(self, callback=None):
         """
